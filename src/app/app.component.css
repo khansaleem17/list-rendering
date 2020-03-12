@@ -1,0 +1,13 @@
+virtual-scroller {
+  display: block;
+  height: calc(100% - 30px);
+  position: absolute;
+  width: 100%;
+  top: 20%;
+  left: 0;
+  box-sizing: border-box;
+}
+
+button + button {
+  margin-left: 20px;
+}
