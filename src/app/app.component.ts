@@ -99,22 +99,25 @@ export class AppComponent implements OnInit {
   }
 
   moveUpDown(type) {
-    const rowIndex = this.selectedData[0].rowIndex;
-    const toIndex = type === 'down' ? rowIndex + 1 : rowIndex - 1;
+    debugger
     if(this.checkSelected()) {
       if(type === 'down' && this.downButtonDisabled){
-        // alert('cannot move below this')
         return;
       }
       if(type === 'up' && this.upButtonDisabled){
-      //  alert('cannot move above this')
         return;
       }
+    
+    const rowIndex = this.selectedData[0].rowIndex;
+    const toIndex = type === 'down' ? rowIndex + 1 : rowIndex - 1;
+   
        const newStore = this.data.slice();
         this.moveInArray(newStore, rowIndex, toIndex);
         this.data = newStore;
         this.gridApi.setRowData(newStore);
+        this.selectedData = [];
         this.gridApi.clearFocusedCell();
     }
   }
+  
 }
