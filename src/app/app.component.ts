@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { IPageInfo } from 'ngx-virtual-scroller';
+import { catchError, tap, combineAll } from 'rxjs/operators';
+import { AgGridAngular } from 'ag-grid-angular';
 
 
 
@@ -12,12 +12,22 @@ import { IPageInfo } from 'ngx-virtual-scroller';
 })
 export class AppComponent implements OnInit {
   data: any[] = [];
+  private gridApi;
+  private gridColumnApi;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
 
+  columnDefs = [
+    {headerName: 'ID', field: 'id',resizable: true,width:400,rowDrag: true  },
+    {headerName: 'Rule Name', field: 'ruleName', resizable: true,width:400},
+    {headerName: 'clone', field: 'isClone',width:200, resizable: true}
+];
+  enableBtns: boolean;
+  selectedData: any;
+  selectedIndex: number;
   constructor(private http: HttpClient) {
   }
   ngOnInit() {
     this.getData();
-    console.log('saleem', this.data);
   }
 
   getData() {
@@ -26,7 +36,6 @@ export class AppComponent implements OnInit {
       this.data = JSON.parse(data);
       return;
     }
-    // console.log('data', data);
     this.http.get('http://jivoxdevuploads.s3.amazonaws.com/eam-dev/files/44939/Rule%20JSON.json').pipe(
       catchError(e => {
         return e;
@@ -34,25 +43,44 @@ export class AppComponent implements OnInit {
       tap(response => {
         if (response && response['data']) {
           const resData = JSON.stringify(response['data']);
-          localStorage.setItem('listData', data);
+          localStorage.setItem('listData', resData);
         }
       })
     ).subscribe();
   }
 
-  fetchMore(event: IPageInfo) {
-    console.log(event)
-    if (event.endIndex === this.data.length - 1) {
-      console.log('hello');
+  
+  deleteRow() {
+    if(this.checkSelected()) {
+      this.gridApi.updateRowData({ remove: [this.selectedData[0].data] });
+      alert('row deleted successfully');
+      this.enableBtns = false;
+    }
+     
+  }
+  rowSelected(e){
+    this.selectedData = this.gridApi.getSelectedNodes();
+    if(this.selectedData){
+      this.enableBtns = true;
     }
   }
-  trackByFn(index, item) {
-    return index; // or item.id
+  onReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
   }
-  moveUp(e, i) {
-    console.log(i)
+  clone(){
+    if(this.checkSelected()) {
+      const newObj = {...this.selectedData[0].data,isClone:true}
+      this.gridApi.updateRowData({ add: [newObj],
+      addIndex : this.selectedData[0].rowIndex + 1 });
+    }
   }
-  clone(item, i) {
-    this.data.unshift(item)
+  checkSelected(){
+    if(!(this.selectedData && this.selectedData.length)) {
+      alert('Select a row to perform this operation');
+      return false;
+    }
+    return true;
+
   }
 }

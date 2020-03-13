@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { AgGridModule } from 'ag-grid-angular';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 @NgModule({
@@ -13,9 +14,11 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
   imports: [
     BrowserModule,
     HttpClientModule,
-    VirtualScrollerModule,
+    AgGridModule.withComponents([]),
+    AngularFontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

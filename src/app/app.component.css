@@ -1,13 +1,20 @@
 virtual-scroller {
   display: block;
-  height: calc(100% - 30px);
-  position: absolute;
-  width: 100%;
-  top: 20%;
-  left: 0;
-  box-sizing: border-box;
+    height: calc(100% - 100px);
+    position: absolute;
+    width: 100%;
+    top: 5%;
+    left: 0;
+    box-sizing: border-box;
 }
 
 button + button {
   margin-left: 20px;
+}
+i{
+  cursor: pointer;
+  opacity: 0.2;
+}
+.full-opacity{
+  opacity: 1;
 }
