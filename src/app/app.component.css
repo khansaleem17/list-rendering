@@ -18,3 +18,12 @@ i{
 .full-opacity{
   opacity: 1;
 }
+.custom-btn{
+  border: 0;
+  background: transparent;
+  margin-left: 20px;
+
+}
+.custom-btn i {
+  opacity: 1;
+}

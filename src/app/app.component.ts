@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
   enableBtns: boolean;
   selectedData: any;
   selectedIndex: number;
+  upButtonDisabled = false;
+  downButtonDisabled = false;
   constructor(private http: HttpClient) {
   }
   ngOnInit() {
@@ -59,8 +61,15 @@ export class AppComponent implements OnInit {
      
   }
   rowSelected(e){
+    this.upButtonDisabled = this.downButtonDisabled =  false;
     this.selectedData = this.gridApi.getSelectedNodes();
-    if(this.selectedData){
+    if(this.selectedData && this.selectedData.length){
+      if(this.selectedData[0].rowIndex === 0) {
+        this.upButtonDisabled = true;
+      }
+      if(this.selectedData[0].rowIndex === this.data.length -1) {
+        this.downButtonDisabled = true;
+      }
       this.enableBtns = true;
     }
   }
@@ -82,5 +91,30 @@ export class AppComponent implements OnInit {
     }
     return true;
 
+  }
+  moveInArray(arr, fromIndex, toIndex) {
+    const element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+  }
+
+  moveUpDown(type) {
+    const rowIndex = this.selectedData[0].rowIndex;
+    const toIndex = type === 'down' ? rowIndex + 1 : rowIndex - 1;
+    if(this.checkSelected()) {
+      if(type === 'down' && this.downButtonDisabled){
+        // alert('cannot move below this')
+        return;
+      }
+      if(type === 'up' && this.upButtonDisabled){
+      //  alert('cannot move above this')
+        return;
+      }
+       const newStore = this.data.slice();
+        this.moveInArray(newStore, rowIndex, toIndex);
+        this.data = newStore;
+        this.gridApi.setRowData(newStore);
+        this.gridApi.clearFocusedCell();
+    }
   }
 }
