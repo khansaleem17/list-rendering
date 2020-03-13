@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   selectedIndex: number;
   upButtonDisabled = false;
   downButtonDisabled = false;
+  showLoader =false;
   constructor(private http: HttpClient) {
   }
   ngOnInit() {
@@ -33,19 +34,23 @@ export class AppComponent implements OnInit {
   }
 
   getData() {
-    const data = localStorage.getItem('listData');
-    if (data) {
-      this.data = JSON.parse(data);
-      return;
-    }
+    this.showLoader = true
+   // const data = localStorage.getItem('listData');
+    // if (data) {
+    //   this.data = JSON.parse(data);
+    //   return;
+    // }
     this.http.get('http://jivoxdevuploads.s3.amazonaws.com/eam-dev/files/44939/Rule%20JSON.json').pipe(
       catchError(e => {
+        this.showLoader = false
         return e;
       }),
       tap(response => {
+        this.showLoader = false
         if (response && response['data']) {
-          const resData = JSON.stringify(response['data']);
-          localStorage.setItem('listData', resData);
+          // const resData = JSON.stringify(response['data']);
+          // localStorage.setItem('listData', resData);
+          this.data = response['data']
         }
       })
     ).subscribe();
@@ -99,7 +104,6 @@ export class AppComponent implements OnInit {
   }
 
   moveUpDown(type) {
-    debugger
     if(this.checkSelected()) {
       if(type === 'down' && this.downButtonDisabled){
         return;
