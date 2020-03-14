@@ -9,32 +9,25 @@
 </div>
 <div class="container">
   <div class="row mt-3">
-      <div class="col-md-2">
-        <i [ngClass]="{'full-opacity':enableBtns}" (click)="deleteRow()" class="fa fa-trash"><span class="pl-2">delete</span></i>
-      </div>
-      <div class="col-md-2">
-        <i (click)="clone()"
-        [ngClass]="{'full-opacity':enableBtns}" class="fa fa-clone"><span class="pl-2">Clone</span></i>
-      </div>
-      <div class="col-md-2">
-        <i [ngClass]="{'full-opacity':(enableBtns && !upButtonDisabled)}" (click)="moveUpDown('up')" class="fa fa-chevron-up"><span class="pl-2">Move Up</span></i>
-      </div>
-      <div class="col-md-2">
-        <i (click)="moveUpDown('down')"
-        [ngClass]="{'full-opacity':(enableBtns && !downButtonDisabled)}" class="fa fa-chevron-down"><span class="pl-2">Move Down</span></i>
-      </div>
-
-
+    <div class="col-md-2">
+      <i [ngClass]="{'full-opacity':enableBtns}" (click)="deleteRow()" class="fa fa-trash"><span
+          class="pl-2">delete</span></i>
+    </div>
+    <div class="col-md-2">
+      <i (click)="clone()" [ngClass]="{'full-opacity':enableBtns}" class="fa fa-clone"><span
+          class="pl-2">Clone</span></i>
+    </div>
+    <div class="col-md-2">
+      <i [ngClass]="{'full-opacity':(enableBtns && !upButtonDisabled)}" (click)="moveUpDown('up')"
+        class="fa fa-chevron-up"><span class="pl-2">Move Up</span></i>
+    </div>
+    <div class="col-md-2">
+      <i (click)="moveUpDown('down')" [ngClass]="{'full-opacity':(enableBtns && !downButtonDisabled)}"
+        class="fa fa-chevron-down"><span class="pl-2">Move Down</span></i>
+    </div>
   </div>
-  <ag-grid-angular 
-    style="width: 100%; height: 500px;"
-    class="ag-theme-balham mt-2"
-    [rowData]="data"
-    rowSelection="single"
-    (rowSelected)="rowSelected($event)"
-    [columnDefs]="columnDefs"
-    (gridReady)="onReady($event)"
-    [rowDragManaged]="true"
->
-</ag-grid-angular>
+  <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-balham mt-2" [rowData]="data"
+    rowSelection="single" (rowSelected)="rowSelected($event)" [columnDefs]="columnDefs" (gridReady)="onReady($event)"
+    [rowDragManaged]="true">
+  </ag-grid-angular>
 </div>

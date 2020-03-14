@@ -17,16 +17,16 @@ export class AppComponent implements OnInit {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
 
   columnDefs = [
-    {headerName: 'ID', field: 'id',resizable: true,width:400,rowDrag: true  },
-    {headerName: 'Rule Name', field: 'ruleName', resizable: true,width:400},
-    {headerName: 'clone', field: 'isClone',width:200, resizable: true}
-];
+    { headerName: 'ID', field: 'id', resizable: true, width: 400, rowDrag: true },
+    { headerName: 'Rule Name', field: 'ruleName', resizable: true, width: 400 },
+    { headerName: 'clone', field: 'isClone', width: 200, resizable: true }
+  ];
   enableBtns: boolean;
   selectedData: any;
   selectedIndex: number;
   upButtonDisabled = false;
   downButtonDisabled = false;
-  showLoader =false;
+  showLoader = false;
   constructor(private http: HttpClient) {
   }
   ngOnInit() {
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
 
   getData() {
     this.showLoader = true
-   // const data = localStorage.getItem('listData');
+    // const data = localStorage.getItem('listData');
     // if (data) {
     //   this.data = JSON.parse(data);
     //   return;
@@ -57,23 +57,23 @@ export class AppComponent implements OnInit {
     ).subscribe();
   }
 
-  
+
   deleteRow() {
-    if(this.checkSelected()) {
+    if (this.checkSelected()) {
       this.gridApi.updateRowData({ remove: [this.selectedData[0].data] });
       alert('row deleted successfully');
       this.enableBtns = false;
     }
-     
+
   }
-  rowSelected(e){
-    this.upButtonDisabled = this.downButtonDisabled =  false;
+  rowSelected(e) {
+    this.upButtonDisabled = this.downButtonDisabled = false;
     this.selectedData = this.gridApi.getSelectedNodes();
-    if(this.selectedData && this.selectedData.length){
-      if(this.selectedData[0].rowIndex === 0) {
+    if (this.selectedData && this.selectedData.length) {
+      if (this.selectedData[0].rowIndex === 0) {
         this.upButtonDisabled = true;
       }
-      if(this.selectedData[0].rowIndex === this.data.length -1) {
+      if (this.selectedData[0].rowIndex === this.data.length - 1) {
         this.downButtonDisabled = true;
       }
       this.enableBtns = true;
@@ -83,15 +83,17 @@ export class AppComponent implements OnInit {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
   }
-  clone(){
-    if(this.checkSelected()) {
-      const newObj = {...this.selectedData[0].data,isClone:true}
-      this.gridApi.updateRowData({ add: [newObj],
-      addIndex : this.selectedData[0].rowIndex + 1 });
+  clone() {
+    if (this.checkSelected()) {
+      const newObj = { ...this.selectedData[0].data, isClone: true }
+      this.gridApi.updateRowData({
+        add: [newObj],
+        addIndex: this.selectedData[0].rowIndex + 1
+      });
     }
   }
-  checkSelected(){
-    if(!(this.selectedData && this.selectedData.length)) {
+  checkSelected() {
+    if (!(this.selectedData && this.selectedData.length)) {
       alert('Select a row to perform this operation');
       return false;
     }
@@ -105,24 +107,22 @@ export class AppComponent implements OnInit {
   }
 
   moveUpDown(type) {
-    if(this.checkSelected()) {
-      if(type === 'down' && this.downButtonDisabled){
+    if (this.checkSelected()) {
+      if (type === 'down' && this.downButtonDisabled) {
         return;
       }
-      if(type === 'up' && this.upButtonDisabled){
+      if (type === 'up' && this.upButtonDisabled) {
         return;
       }
-    
-    const rowIndex = this.selectedData[0].rowIndex;
-    const toIndex = type === 'down' ? rowIndex + 1 : rowIndex - 1;
-   
-       const newStore = this.data.slice();
-        this.moveInArray(newStore, rowIndex, toIndex);
-        this.data = newStore;
-        this.gridApi.setRowData(newStore);
-        this.selectedData = [];
-        this.gridApi.clearFocusedCell();
+      const rowIndex = this.selectedData[0].rowIndex;
+      const toIndex = type === 'down' ? rowIndex + 1 : rowIndex - 1;
+      const newStore = this.data.slice();
+      this.moveInArray(newStore, rowIndex, toIndex);
+      this.data = newStore;
+      this.gridApi.setRowData(newStore);
+      this.selectedData = [];
+      this.gridApi.clearFocusedCell();
     }
   }
-  
+
 }
