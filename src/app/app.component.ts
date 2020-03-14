@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
     this.http.get('http://jivoxdevuploads.s3.amazonaws.com/eam-dev/files/44939/Rule%20JSON.json').pipe(
       catchError(e => {
         this.showLoader = false
+        alert('something went wrong!')
         return e;
       }),
       tap(response => {
